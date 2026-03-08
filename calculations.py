@@ -1,21 +1,20 @@
 import numpy as np
 
 def calculate_wrist_velocity(prev_wrist, curr_wrist, time_delta, w, h):
-    # Convert from normalized (0-1) to pixel coordinates
+    if time_delta == 0:
+        return 0, 0
+    
+    # Convert from normalized to pixel coordinates
     prev_x = prev_wrist.x * w
     prev_y = prev_wrist.y * h
     curr_x = curr_wrist.x * w
     curr_y = curr_wrist.y * h
 
-    # Distance between previous and current position
-    dx = curr_x - prev_x
-    dy = curr_y - prev_y
-    distance = np.sqrt(dx**2 + dy**2)
+    # Velocity in each direction (can be negative)
+    vx = (curr_x - prev_x) / time_delta  # positive = moving right
+    vy = (curr_y - prev_y) / time_delta  # positive = moving down, negative = moving up
 
-    # Velocity = distance / time
-    velocity = distance / time_delta
-
-    return velocity
+    return vx, vy
 
 def calculate_angle(a, b, c):
     """
@@ -35,3 +34,4 @@ def calculate_angle(a, b, c):
     angle = np.degrees(np.arccos(np.clip(cosine_angle, -1.0, 1.0)))
 
     return angle
+
