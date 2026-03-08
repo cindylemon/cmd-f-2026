@@ -14,7 +14,7 @@
   color: #888;
 }
 
-.home-page, .training-page {
+.home-page, .training-page, .resources-page {
   margin: 0;
   padding: 0;
   display: flex;

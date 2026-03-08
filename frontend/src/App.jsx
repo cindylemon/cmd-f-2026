@@ -11,22 +11,14 @@ function makeItems(setPage) {
       ariaLabel: 'Resources',
       rotation: -8,
       hoverStyles: { bgColor: '#3b82f6', textColor: '#ffffff' },
-      onClick: () => setPage('coaching')
+      onClick: () => setPage('resources')
     },
     {
-      label: 'training',
+      label: 'live coaching',
       href: '#',
-      ariaLabel: 'Training',
+      ariaLabel: 'Live Coaching',
       rotation: 8,
       hoverStyles: { bgColor: '#10b981', textColor: '#ffffff' },
-      onClick: () => setPage('coaching')
-    },
-    {
-      label: 'summary',
-      href: '#',
-      ariaLabel: 'Summary',
-      rotation: 8,
-      hoverStyles: { bgColor: '#f59e0b', textColor: '#ffffff' },
       onClick: () => setPage('coaching')
     }
   ];
@@ -60,6 +52,13 @@ function App() {
         <img src={placeholder} alt="badminton" className='home-image'/>
       </div>
     )
+  }
+
+  if (page === 'resources') {
+    return (<div className="resources-page">
+        <button onClick={() => setPage('home')}>← Back to Home</button>
+        
+    </div>)
   }
 
   return (
