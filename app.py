@@ -14,6 +14,12 @@ if "logged_in" not in st.session_state:
 if "username" not in st.session_state:
     st.session_state.username = ""
 
+if "login_username" not in st.session_state:
+    st.session_state.login_username = ""
+
+if "login_password" not in st.session_state:
+    st.session_state.login_password = ""
+
 def show_login():
     left, center, right = st.columns([1, 2, 1])
 
@@ -23,8 +29,8 @@ def show_login():
             st.write("Sign in to use the badminton swing coach.")
 
             with st.form("login_form"):
-                username = st.text_input("Username")
-                password = st.text_input("Password", type="password")
+                username = st.text_input("Username", key="login_username")
+                password = st.text_input("Password", type="password", key="login_password")
                 submitted = st.form_submit_button("Log in", use_container_width=True)
 
             if submitted:
@@ -44,12 +50,15 @@ def show_logout():
         if st.button("Log out"):
             st.session_state.logged_in = False
             st.session_state.username = ""
+            st.session_state.login_username = ""
+            st.session_state.login_password = ""
             st.rerun()
 
 if not st.session_state.logged_in:
     show_login()
     st.stop()
-    
+
+show_logout()
 st.title("Coach Alan Wu")
 feedback = {
     "elbow_angle": 170,
