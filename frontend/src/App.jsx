@@ -59,7 +59,17 @@ function App() {
   if (page === 'resources') {
     return (<div className="resources-page">
         <button onClick={() => setPage('home')}>← Back to Home</button>
-        
+        <h1 className="resource">Videos</h1>
+        <ul>
+          <li><a href="https://www.youtube.com/watch?v=fBa08o5GEqw">Badminton Footwork Drills</a></li>
+          <li><a href="https://www.youtube.com/watch?v=5VNL43j0-XI">Net Shots</a></li>
+          <li><a href="https://www.youtube.com/watch?v=bJuiT6xzPuI">Common Mistakes</a></li>
+        </ul>
+        <h1 className="resource">Articles</h1>
+        <ul>
+          <li><a href="https://badminton-insight.com/footwork-articles/">Footwork</a></li>
+          <li><a href="https://badminton-insight.com/training-articles/">Training Routines</a></li>
+        </ul>
     </div>)
   }
 
