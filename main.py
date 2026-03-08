@@ -27,29 +27,22 @@ def speak_async(text):
 
 
 
-speech_process = None
 
 def play_sound(text):
-    global speech_process
-
-    if not text:
-        return
-
-    # If something is already speaking, skip this one
-    if speech_process is not None and speech_process.poll() is None:
-        return
-
-    speech_process = subprocess.Popen(["say", "-r", "250", text])
+    thread = threading.Thread(target=lambda: os.system(f'say -r 250 "{text}"'))
+    thread.daemon = True
+    thread.start()
+   
 
 
 def set_state(state, left_wrist, left_shoulder, smoothed_cvx, smoothed_cvy):
 
     prev_phase = state.prev_phase
+    angle = math.degrees(math.atan2(-smoothed_cvy, smoothed_cvx))
     # total speed
     speed = math.sqrt(smoothed_cvx**2 + smoothed_cvy**2)
 
     # direction angle in degrees (0=right, 90=up, -90=down, 180=left)
-    angle = math.degrees(math.atan2(-smoothed_cvy, smoothed_cvx))
     if prev_phase == phases.Phase.BW_SWING and smoothed_cvx < 0 and speed > 150:
         phase = phases.Phase.CRUX
 
@@ -60,16 +53,38 @@ def set_state(state, left_wrist, left_shoulder, smoothed_cvx, smoothed_cvy):
     elif speed > 150 and (angle > 120 or angle < -90):
         phase = phases.Phase.FOLLOW_THROUGH
 
-    elif speed < 50 and left_wrist.y > left_shoulder.y:
+    elif speed < 10 and left_wrist.y > left_shoulder.y:
         phase = phases.Phase.REST
-        state.contact_fired = False
-
+        contact_fired = False
+        upward_motion_seen = False
 
     else:
         if prev_phase in (phases.Phase.CONTACT, phases.Phase.CRUX):
             phase = phases.Phase.FOLLOW_THROUGH
         else:
             phase = prev_phase
+
+    # angle = math.degrees(math.atan2(-smoothed_cvy, smoothed_cvx))
+    # if prev_phase == phases.Phase.BW_SWING and smoothed_cvx < 0 and speed > 150:
+    #     phase = phases.Phase.CRUX
+
+    # elif speed > 100 and 10 < angle < 60:
+    #     phase = phases.Phase.BW_SWING
+    #     state.contact_fired = False
+
+    # elif speed > 100 and (angle > 120 or angle < -90):
+    #     phase = phases.Phase.FOLLOW_THROUGH
+
+    # elif speed < 10 and left_wrist.y > left_shoulder.y:
+    #     phase = phases.Phase.REST
+    #     state.contact_fired = False
+
+
+    # else:
+    #     if prev_phase in (phases.Phase.CONTACT, phases.Phase.CRUX):
+    #         phase = phases.Phase.FOLLOW_THROUGH
+    #     else:
+    #         phase = prev_phase
     
 
 
@@ -87,12 +102,15 @@ def set_state(state, left_wrist, left_shoulder, smoothed_cvx, smoothed_cvy):
     return phase
 
 
-def print_phase(state, elbow_angle, armpit_angle):
+def print_phase(state, elbow_angle, armpit_angle, smoothed_cvx, smoothed_cvy):
+    angle = math.degrees(math.atan2(-smoothed_cvy, smoothed_cvx))
+    #print(f'angle: {angle}')
     match (state.current_phase):
         case phases.Phase.REST:
             print("rest")
         case phases.Phase.BW_SWING:
             print("back swing")
+            
         case phases.Phase.CRUX:
             print(f'elbowangle: {elbow_angle}')
             print(f'armpitangle: {armpit_angle}')
@@ -266,14 +284,14 @@ def handle_frame_landmarks(rgb_image, detection_result, state, move, mode, curr_
         state.current_phase = set_state(state, left_wrist, left_shoulder, smoothed_cvx, smoothed_cvy)
         
         #print(f"speed: {speed:.2f}, prev_speed: {prev_speed:.2f}, angle: {angle:.2f}")
-        print_phase(state, elbow_angle, armpit_angle)
+        print_phase(state, elbow_angle, armpit_angle, smoothed_cvx, smoothed_cvy)
 
         feedback = get_feedback(state, move, mode, elbow_angle, armpit_angle)
 
                 
     
 
-        if feedback and (state.current_phase == phases.Phase.CONTACT or state.current_phase == phases.Phase.CRUX):
+        if (state.current_phase == phases.Phase.CONTACT or state.current_phase == phases.Phase.CRUX):
             play_sound(feedback)
         
         #update current phase
