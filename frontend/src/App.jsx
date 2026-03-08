@@ -3,32 +3,30 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [page, setPage] = useState('home') // 'home' or 'coaching'
+
+  if (page === 'home') {
+    return (
+      <div style={{ background: '#040c29', color: 'white', height: '100vh', textAlign: 'center' }}>
+        <h1>🏸 Coach Alan Wu</h1>
+        <p>Select a shot to practice</p>
+        <button onClick={() => setPage('coaching')}>Start Coaching</button>
+      </div>
+    )
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <button onClick={() => setPage('home')}>← Back to Home</button>
+      <iframe
+        src="http://localhost:8501"
+        width="100%"
+        height="800px"
+        style={{ border: 'none' }}
+      />
+    </div>
   )
 }
 
