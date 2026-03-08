@@ -30,7 +30,9 @@ function App() {
   if (page === 'home') {
     return (
       <div className="home-page">
-        <h1>Ready to train?</h1>
+        <h1>Swing Sensei</h1>
+        <p className="home-subtitle"><em>Your AI-powered badminton coach</em></p>
+        <p className="home-subtitle">Ready to train? — click <em>yes</em> to get started.</p>
         {/* <button onClick={() => setPage('coaching')}>Resources</button>
         <button onClick={() => setPage('coaching')}>Start Coaching</button>
         <button onClick={() => setPage('coaching')}>See Summary</button> */}
