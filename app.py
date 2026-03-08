@@ -1,7 +1,21 @@
 import streamlit as st
 import cv2
 import mediapipe as mp
-
+st.markdown("""
+<style>
+    .stApp {
+        background-color: #040c29;
+    }
+    /* Hide Streamlit header/toolbar */
+    header[data-testid="stHeader"] {
+        display: none;
+    }
+    /* Remove the top padding that was reserved for the header */
+    .block-container {
+        padding-top: 1rem;
+    }
+</style>
+""", unsafe_allow_html=True)
 st.title("Coach Alan Wu")
 feedback = {
     "elbow_angle": 170,

@@ -18,7 +18,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div className='training-page'> 
       <button onClick={() => setPage('home')}>← Back to Home</button>
       <iframe
         src="http://localhost:8501"
