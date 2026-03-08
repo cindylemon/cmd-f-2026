@@ -85,5 +85,6 @@ desktop.ini
 
 # Node
 node_modules/
+/package-lock.json
 frontend/build/
 frontend/.env.local
